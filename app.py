@@ -84,161 +84,446 @@ def ikon(nama, ukuran=20):
 
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap');
 
 :root{
-  --ink:#0E2A3A; --teal:#12708A; --teal-dark:#0D5A6F; --muted:#5F7080;
-  --line:#DCE3E8; --paper:#F3F6F7; --soft:#E3EEF1;
+  --ink: #0F172A;
+  --teal: #0D768A;
+  --teal-dark: #0A5A6A;
+  --teal-light: #E6F4F7;
+  --muted: #64748B;
+  --line: #E2E8F0;
+  --line-light: #F1F5F9;
+  --paper: #F8FAFC;
+  --card-bg: #FFFFFF;
+  --card-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
+  --card-shadow-hover: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
 }
+
 html, body, .stApp, .stMarkdown, .stMarkdown p, label, input, textarea, button,
 [data-testid="stWidgetLabel"] p, [data-baseweb="select"] div, [data-baseweb="tab"] p,
 h1, h2, h3, h4, h5, h6, table, td, th, li{
-  font-family:'Public Sans','Segoe UI',Helvetica,Arial,sans-serif !important;
+  font-family: 'Plus Jakarta Sans', 'Public Sans', 'Segoe UI', -apple-system, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
 }
 span[data-testid="stIconMaterial"]{font-family:'Material Symbols Rounded' !important;}
 
-.stApp{background:var(--paper); color:var(--ink);}
-.block-container{max-width:1280px; padding-top:2.2rem; padding-bottom:3rem;}
-#MainMenu, footer, [data-testid="stAppDeployButton"], [data-testid="stToolbar"]{visibility:hidden; height:0;}
-[data-testid="stHeader"]{background:transparent;}
+.stApp{
+  background-color: var(--paper) !important;
+  color: var(--ink);
+}
 
-/* ---------- sidebar ---------- */
-[data-testid="stSidebar"]{background:var(--ink); border-right:0;}
-[data-testid="stSidebar"] *{color:#C9D8E0;}
-[data-testid="stSidebar"] .block-container{padding-top:1.2rem;}
-.brand{display:flex; gap:12px; align-items:center; padding:6px 4px 20px 4px;
-  border-bottom:1px solid rgba(255,255,255,.12); margin-bottom:14px;}
-.brand-mark{width:38px; height:38px; border-radius:9px; background:var(--teal);
-  display:flex; align-items:center; justify-content:center; color:#fff !important; flex:none;}
-.brand-mark svg{stroke:#fff;}
-.brand-name{font-weight:700; font-size:15.5px; color:#fff !important; line-height:1.2;}
-.brand-sub{font-size:12.5px; color:#9FB4C0 !important; margin-top:2px;}
+.block-container{
+  max-width: 1320px;
+  padding-top: 2rem;
+  padding-bottom: 3.5rem;
+}
+
+#MainMenu, footer, [data-testid="stAppDeployButton"], [data-testid="stToolbar"]{
+  visibility: hidden;
+  height: 0;
+}
+[data-testid="stHeader"]{background: transparent;}
+
+/* ---------- Container Cards Berbingkai (Streamlit Border Wrapper) ---------- */
+[data-testid="stVerticalBlockBorderWrapper"] {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 12px !important;
+  padding: 1.25rem 1.5rem !important;
+  box-shadow: var(--card-shadow) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+[data-testid="stVerticalBlockBorderWrapper"]:hover {
+  border-color: #CBD5E1 !important;
+  box-shadow: var(--card-shadow-hover) !important;
+}
+
+/* ---------- Sidebar Modern Minimalis ---------- */
+[data-testid="stSidebar"]{
+  background: #0B1926 !important;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+[data-testid="stSidebar"] *{
+  color: #94A3B8;
+}
+[data-testid="stSidebar"] .block-container{
+  padding-top: 1.25rem;
+}
+.brand{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 4px 20px 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 16px;
+}
+.brand-mark{
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0D768A 0%, #08505E 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff !important;
+  flex: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.brand-mark svg{stroke: #fff;}
+.brand-name{
+  font-weight: 700;
+  font-size: 15.5px;
+  color: #F8FAFC !important;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.brand-sub{
+  font-size: 12px;
+  color: #64748B !important;
+  margin-top: 2px;
+}
 [data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"]{
-  border-radius:6px; padding:9px 12px; margin-bottom:2px; text-decoration:none;}
-[data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"]:hover{background:rgba(255,255,255,.07);}
+  border-radius: 8px;
+  padding: 9px 12px;
+  margin-bottom: 3px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+[data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"]:hover{
+  background: rgba(255,255,255,0.06);
+  color: #F8FAFC !important;
+}
 [data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"][aria-current="page"]{
-  background:rgba(255,255,255,.13);}
-[data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"][aria-current="page"] *{color:#fff !important; font-weight:600;}
-[data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"] p{font-size:14.5px; font-weight:500;}
-.side-note{border-top:1px solid rgba(255,255,255,.12); margin-top:18px; padding-top:14px;
-  font-size:12.5px; line-height:1.55; color:#9FB4C0 !important;}
-.side-note b{color:#fff !important; font-weight:600;}
-.dot{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:7px; vertical-align:middle;}
+  background: rgba(255,255,255,0.12);
+  border-left: 3px solid #0D768A;
+}
+[data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"][aria-current="page"] *{
+  color: #F8FAFC !important;
+  font-weight: 600;
+}
+[data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"] p{
+  font-size: 14px;
+  font-weight: 500;
+}
+.side-note{
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 24px;
+  padding-top: 16px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #64748B !important;
+}
+.side-note b{
+  color: #E2E8F0 !important;
+  font-weight: 600;
+}
+.dot{
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 7px;
+  vertical-align: middle;
+}
 
-/* ---------- judul halaman ---------- */
-.pg-head{display:flex; gap:14px; align-items:center; padding-bottom:18px;
-  border-bottom:1px solid var(--line); margin-bottom:22px;}
-.pg-icon{width:44px; height:44px; border-radius:10px; background:var(--soft); color:var(--teal);
-  display:flex; align-items:center; justify-content:center; flex:none;}
-.pg-title{font-size:25px; font-weight:700; letter-spacing:-.01em; color:var(--ink); line-height:1.2; margin:0;}
-.pg-sub{font-size:14.5px; color:var(--muted); margin-top:3px;}
-.sec-title{font-size:16.5px; font-weight:650; color:var(--ink); margin:0 0 4px 0;}
-.sec-sub{font-size:13.5px; color:var(--muted); margin:0 0 12px 0; line-height:1.5;}
+/* ---------- Header Halaman Premium ---------- */
+.pg-head{
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 22px;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 24px;
+}
+.pg-icon{
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: var(--teal-light);
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.pg-title{
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  line-height: 1.2;
+  margin: 0;
+}
+.pg-sub{
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.sec-title{
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 4px 0;
+}
+.sec-sub{
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 14px 0;
+  line-height: 1.5;
+}
 
-/* ---------- kartu ---------- */
-[class*="st-key-card"]{background:#fff; border:1px solid var(--line); border-radius:10px;
-  padding:18px 20px; box-shadow:0 1px 2px rgba(14,42,58,.04);}
-.kpi{background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px 18px; height:100%;
-  box-shadow:0 1px 2px rgba(14,42,58,.04);}
-.kpi-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
-.kpi-lbl{font-size:13.5px; font-weight:500; color:var(--muted);}
-.kpi-ic{color:var(--teal); opacity:.9;}
-.kpi-val{font-size:28px; font-weight:700; letter-spacing:-.02em; margin-top:6px; color:var(--ink);
-  font-variant-numeric:tabular-nums; line-height:1.15;}
-.kpi-val small{font-size:14px; font-weight:500; color:var(--muted); letter-spacing:0; margin-left:4px;}
-.kpi-cap{font-size:12.5px; color:var(--muted); margin-top:6px; line-height:1.45;}
+/* ---------- Kartu KPI ---------- */
+.kpi{
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  height: 100%;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+}
+.kpi:hover{
+  border-color: #CBD5E1;
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-1px);
+}
+.kpi-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.kpi-lbl{
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.kpi-ic{
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--teal-light);
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kpi-val{
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-top: 8px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+.kpi-val small{
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0;
+  margin-left: 4px;
+}
+.kpi-cap{
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.45;
+}
 
-/* ---------- badge ---------- */
-.badge{display:inline-flex; align-items:center; gap:6px; padding:3px 10px 3px 8px; border-radius:999px;
-  font-size:12.5px; font-weight:600; white-space:nowrap;}
-.badge i{width:7px; height:7px; border-radius:50%; display:inline-block;}
+/* ---------- Badge Status ---------- */
+.badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 8px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.badge i{
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
 
-/* ---------- tabel HTML ---------- */
-.tbl-wrap{overflow-x:auto;}
-table.tbl{width:100%; border-collapse:collapse; font-size:14px;}
-table.tbl th{background:#EEF2F4; color:var(--muted); font-weight:600; font-size:12.5px; text-align:left;
-  padding:10px 12px; border-bottom:1px solid var(--line); white-space:nowrap;}
-table.tbl th.num, table.tbl td.num{text-align:right; font-variant-numeric:tabular-nums;}
-table.tbl td{padding:10px 12px; border-bottom:1px solid #EBEFF2; color:var(--ink); vertical-align:middle;}
-table.tbl tr:last-child td{border-bottom:0;}
-table.tbl td small{display:block; color:var(--muted); font-size:12px; margin-top:1px;}
-.bar{height:7px; width:120px; background:#E9EEF1; border-radius:4px; overflow:hidden; display:inline-block;}
-.bar span{display:block; height:100%; border-radius:4px;}
+/* ---------- Tabel HTML Elegan ---------- */
+.tbl-wrap{
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+table.tbl{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+table.tbl th{
+  background: #F8FAFC;
+  color: #475569;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+table.tbl th.num, table.tbl td.num{
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+table.tbl td{
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line-light);
+  color: var(--ink);
+  vertical-align: middle;
+  background: #FFFFFF;
+}
+table.tbl tr:hover td{
+  background: #F8FAFC;
+}
+table.tbl tr:last-child td{border-bottom: 0;}
+table.tbl td small{
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 1px;
+}
+.bar{
+  height: 7px;
+  width: 120px;
+  background: #E2E8F0;
+  border-radius: 4px;
+  overflow: hidden;
+  display: inline-block;
+}
+.bar span{display: block; height: 100%; border-radius: 4px;}
 
-/* ---------- daftar perhatian ---------- */
-.att{display:flex; justify-content:space-between; align-items:center; gap:12px;
-  padding:11px 0; border-bottom:1px solid #EBEFF2;}
-.att:last-child{border-bottom:0;}
-.att-name{font-weight:600; font-size:14.5px;}
-.att-sub{font-size:12.5px; color:var(--muted); margin-top:1px;}
-.att-right{text-align:right;}
-.att-val{font-variant-numeric:tabular-nums; font-weight:600; font-size:14.5px;}
+/* ---------- Daftar Perhatian ---------- */
+.att{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line-light);
+}
+.att:last-child{border-bottom: 0;}
+.att-name{font-weight: 600; font-size: 14.5px; color: var(--ink);}
+.att-sub{font-size: 12.5px; color: var(--muted); margin-top: 1px;}
+.att-right{text-align: right;}
+.att-val{font-variant-numeric: tabular-nums; font-weight: 700; font-size: 14.5px; color: var(--ink);}
 
-/* ---------- skala ambang ---------- */
-.scale{position:relative; padding:40px 14px 84px 14px;}
-.rail{position:relative; height:12px;}
-.track{display:flex; height:12px; border-radius:6px; overflow:hidden;}
-.seg{display:block; height:100%; opacity:.88;}
-.m-pred{position:absolute; top:-12px; width:3px; height:36px; background:var(--ink); transform:translateX(-50%); border-radius:2px;}
-.m-pred span{position:absolute; bottom:100%; left:50%; transform:translateX(-50%); margin-bottom:4px;
-  background:var(--ink); color:#fff !important; padding:2px 9px; border-radius:4px; font-size:12px;
-  font-weight:600; white-space:nowrap; font-variant-numeric:tabular-nums;}
-.m-now{position:absolute; top:50%; width:14px; height:14px; border-radius:50%; background:#fff;
-  border:3px solid var(--ink); transform:translate(-50%,-50%); box-sizing:border-box;}
-.tick{position:absolute; top:20px; transform:translateX(-50%); text-align:center; font-size:12px;
-  line-height:1.3; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums;}
-.tick i{display:block; width:1px; height:6px; background:#9AA9B4; margin:0 auto 2px auto;}
-.tick b{display:block; color:var(--ink); font-weight:600;}
-.tick.low{top:56px;}
-.legend{display:flex; gap:18px; font-size:12.5px; color:var(--muted); margin-top:-6px; padding-left:14px; align-items:center;}
-.legend .sw{display:inline-block; vertical-align:middle; margin-right:6px;}
-.sw-now{width:12px; height:12px; border-radius:50%; border:3px solid var(--ink); box-sizing:border-box; background:#fff;}
-.sw-pred{width:3px; height:14px; background:var(--ink); border-radius:2px;}
+/* ---------- Skala Ambang Horizontal ---------- */
+.scale{position: relative; padding: 42px 14px 84px 14px;}
+.rail{position: relative; height: 12px;}
+.track{display: flex; height: 12px; border-radius: 6px; overflow: hidden;}
+.seg{display: block; height: 100%; opacity: 0.9;}
+.m-pred{position: absolute; top: -12px; width: 3px; height: 36px; background: var(--ink); transform: translateX(-50%); border-radius: 2px;}
+.m-pred span{
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 5px;
+  background: var(--ink); color: #fff !important; padding: 3px 9px; border-radius: 4px; font-size: 12px;
+  font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+.m-now{
+  position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%; background: #fff;
+  border: 3px solid var(--ink); transform: translate(-50%,-50%); box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.tick{position: absolute; top: 20px; transform: translateX(-50%); text-align: center; font-size: 12px;
+  line-height: 1.3; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums;}
+.tick i{display: block; width: 1px; height: 6px; background: #9AA9B4; margin: 0 auto 2px auto;}
+.tick b{display: block; color: var(--ink); font-weight: 600;}
+.tick.low{top: 56px;}
+.legend{display: flex; gap: 20px; font-size: 12.5px; color: var(--muted); margin-top: -6px; padding-left: 14px; align-items: center;}
+.legend .sw{display: inline-block; vertical-align: middle; margin-right: 6px;}
+.sw-now{width: 12px; height: 12px; border-radius: 50%; border: 3px solid var(--ink); box-sizing: border-box; background: #fff;}
+.sw-pred{width: 3px; height: 14px; background: var(--ink); border-radius: 2px;}
 
-/* ---------- hasil prediksi ---------- */
-.res-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;}
-.res-city{font-size:14px; color:var(--muted);}
-.res-big{font-size:42px; font-weight:700; letter-spacing:-.025em; line-height:1.1; margin-top:4px;
-  font-variant-numeric:tabular-nums;}
-.res-big small{font-size:17px; font-weight:500; color:var(--muted); margin-left:6px; letter-spacing:0;}
-.res-delta{font-size:14px; color:var(--muted); margin-top:6px;}
-.res-note{font-size:13.5px; color:var(--ink); background:#F3F6F7; border-radius:8px; padding:10px 12px;
-  margin-top:14px; line-height:1.5;}
-.mini-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:14px;}
-.mini{border:1px solid var(--line); border-radius:8px; padding:10px 12px;}
-.mini .l{font-size:12.5px; color:var(--muted);}
-.mini .v{font-size:17px; font-weight:650; font-variant-numeric:tabular-nums; margin-top:2px;}
+/* ---------- Hasil Prediksi ---------- */
+.res-head{display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;}
+.res-city{font-size: 13.5px; font-weight: 500; color: var(--muted);}
+.res-big{
+  font-size: 44px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-top: 4px;
+  color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.res-big small{font-size: 18px; font-weight: 500; color: var(--muted); margin-left: 6px; letter-spacing: 0;}
+.res-delta{font-size: 14px; color: var(--muted); margin-top: 6px;}
+.res-note{
+  font-size: 13.5px; color: var(--ink); background: #F8FAFC; border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px 14px; margin-top: 16px; line-height: 1.5;
+}
+.mini-grid{display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;}
+.mini{
+  border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; background: #FFFFFF;
+}
+.mini .l{font-size: 12px; font-weight: 500; color: var(--muted);}
+.mini .v{font-size: 18px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; margin-top: 3px;}
 
-.callout{border-left:3px solid var(--teal); background:#fff; border-radius:0 8px 8px 0;
-  padding:12px 16px; font-size:13.5px; line-height:1.6; color:var(--ink); border-top:1px solid var(--line);
-  border-right:1px solid var(--line); border-bottom:1px solid var(--line);}
-.callout b{font-weight:650;}
+.callout{
+  border-left: 3px solid var(--teal); background: #FFFFFF; border-radius: 0 8px 8px 0;
+  padding: 14px 18px; font-size: 13.5px; line-height: 1.6; color: var(--ink);
+  border-top: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+}
+.callout b{font-weight: 650;}
 
-/* ---------- kontrol ---------- */
-.stButton > button, .stDownloadButton > button{border-radius:6px; font-weight:600; padding:.55rem 1.1rem;
-  border:1px solid #C3CED6; background:#fff; color:var(--ink); transition:background .15s, border-color .15s;}
-.stButton > button:hover, .stDownloadButton > button:hover{border-color:var(--teal); color:var(--teal); background:#F4FAFB;}
+/* ---------- Kontrol, Tombol, Form Modern ---------- */
+.stButton > button, .stDownloadButton > button{
+  border-radius: 8px; font-weight: 600; padding: 0.55rem 1.2rem;
+  border: 1px solid #CBD5E1; background: #FFFFFF; color: var(--ink);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  transition: all 0.15s ease-in-out;
+}
+.stButton > button:hover, .stDownloadButton > button:hover{
+  border-color: var(--teal); color: var(--teal); background: #F8FAFC;
+  transform: translateY(-1px);
+}
 .stButton > button[kind="primary"], button[data-testid="stBaseButton-primary"]{
-  background:var(--teal); border-color:var(--teal); color:#fff;}
+  background: var(--teal) !important; border-color: var(--teal) !important; color: #fff !important;
+  box-shadow: 0 1px 2px rgba(13,118,138,0.2) !important;
+}
 .stButton > button[kind="primary"]:hover, button[data-testid="stBaseButton-primary"]:hover{
-  background:var(--teal-dark); border-color:var(--teal-dark); color:#fff;}
+  background: var(--teal-dark) !important; border-color: var(--teal-dark) !important; color: #fff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(13,118,138,0.25) !important;
+}
 .stButton > button:focus-visible, .stDownloadButton > button:focus-visible{
-  outline:3px solid rgba(18,112,138,.35); outline-offset:2px;}
-[data-baseweb="input"], [data-baseweb="select"] > div, [data-baseweb="base-input"]{border-radius:6px !important;}
-[data-testid="stWidgetLabel"] p{font-size:13.5px; font-weight:600; color:var(--ink);}
-button[data-baseweb="tab"]{padding:10px 4px; margin-right:22px;}
-button[data-baseweb="tab"] p{font-size:14.5px; font-weight:600; color:var(--muted);}
-button[data-baseweb="tab"][aria-selected="true"] p{color:var(--teal);}
-div[data-baseweb="tab-highlight"]{background-color:var(--teal) !important; height:2px;}
-[data-testid="stExpander"]{border:1px solid var(--line); border-radius:8px; background:#fff;}
-[data-testid="stDataFrame"]{border:1px solid var(--line); border-radius:8px; overflow:hidden;}
+  outline: 3px solid rgba(13,118,138,0.3); outline-offset: 2px;
+}
+[data-baseweb="input"], [data-baseweb="select"] > div, [data-baseweb="base-input"]{
+  border-radius: 8px !important;
+  border-color: #CBD5E1 !important;
+}
+[data-testid="stWidgetLabel"] p{font-size: 13.5px; font-weight: 600; color: var(--ink);}
+button[data-baseweb="tab"]{padding: 10px 4px; margin-right: 22px;}
+button[data-baseweb="tab"] p{font-size: 14.5px; font-weight: 600; color: var(--muted);}
+button[data-baseweb="tab"][aria-selected="true"] p{color: var(--teal);}
+div[data-baseweb="tab-highlight"]{background-color: var(--teal) !important; height: 2px;}
+[data-testid="stExpander"]{border: 1px solid var(--line); border-radius: 8px; background: #fff;}
+[data-testid="stDataFrame"]{border: 1px solid var(--line); border-radius: 8px; overflow: hidden;}
 
 @media (max-width: 900px){
-  .res-big{font-size:34px;}
-  .mini-grid{grid-template-columns:1fr;}
-  .block-container{padding-left:1rem; padding-right:1rem;}
+  .res-big{font-size: 34px;}
+  .mini-grid{grid-template-columns: 1fr;}
+  .block-container{padding-left: 1rem; padding-right: 1rem;}
 }
-@media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+@media (prefers-reduced-motion: reduce){ *{transition: none !important;} }
 </style>
 """
 
@@ -555,7 +840,7 @@ def halaman_beranda():
     kiri, kanan = st.columns([1.35, 1], gap="medium")
 
     with kiri:
-        with st.container(key="card_peta"):
+        with st.container(border=True, key="card_peta"):
             judul_seksi("Peta status prediksi besok",
                         "Warna titik menunjukkan status risiko menurut ambang persentil masing-masing kota.")
             fig = px.scatter_map(
@@ -573,7 +858,7 @@ def halaman_beranda():
             tampil_grafik(fig)
 
     with kanan:
-        with st.container(key="card_perhatian"):
+        with st.container(border=True, key="card_perhatian"):
             judul_seksi("Paling dekat dengan ambang Awas",
                         "Diurutkan dari perbandingan debit prediksi terhadap ambang Awas (P95) kota.")
             baris = ""
@@ -585,7 +870,7 @@ def halaman_beranda():
             H(baris)
 
     st.write("")
-    with st.container(key="card_tabel"):
+    with st.container(border=True, key="card_tabel"):
         judul_seksi("Semua kota",
                     f"Kondisi pada {tgl_id(TGL_AKHIR)} dan prediksi untuk {tgl_id(tgl_target)}.")
         head = ('<tr><th>Kota</th><th class="num">Debit hari ini</th><th class="num">Prediksi besok</th>'
@@ -624,7 +909,7 @@ def halaman_eksplorasi():
     t1, t2, t3, t4 = st.tabs(["Tren harian", "Respons terhadap hujan", "Pola bulanan", "Peringkat risiko kota"])
 
     with t1:
-        with st.container(key="card_tren"):
+        with st.container(border=True, key="card_tren"):
             periode = st.radio("Periode", ["30 hari terakhir", "90 hari terakhir", "Seluruh data"],
                                horizontal=True, index=1, key="eks_periode")
             gg = g if periode == "Seluruh data" else g.tail(30 if periode.startswith("30") else 90)
@@ -652,7 +937,7 @@ def halaman_eksplorasi():
         lag_df = pd.DataFrame(hasil, columns=["lag", "rho"])
         terbaik = int(lag_df.loc[lag_df["rho"].idxmax(), "lag"])
         with c1:
-            with st.container(key="card_lag"):
+            with st.container(border=True, key="card_lag"):
                 judul_seksi("Korelasi debit dengan hujan tertunda",
                             f"Korelasi Spearman antara debit dan hujan n hari sebelumnya. Puncak pada lag {terbaik} hari.")
                 fig = go.Figure(go.Bar(
@@ -664,7 +949,7 @@ def halaman_eksplorasi():
                 tata_grafik(fig, 340)
                 tampil_grafik(fig)
         with c2:
-            with st.container(key="card_scatter"):
+            with st.container(border=True, key="card_scatter"):
                 judul_seksi("Hujan 3 hari terhadap debit")
                 sc = pd.DataFrame({"hujan3": g["hujan"].rolling(3).sum(), "debit": g["debit"]}).dropna()
                 rho = sc["hujan3"].corr(sc["debit"], method="spearman")
@@ -677,7 +962,7 @@ def halaman_eksplorasi():
                 tampil_grafik(fig)
 
     with t3:
-        with st.container(key="card_bulan"):
+        with st.container(border=True, key="card_bulan"):
             judul_seksi("Debit per bulan", "Median dan nilai maksimum debit harian pada tiap bulan kalender.")
             gm = g.assign(per=g["obs_date"].dt.to_period("M")).groupby("per")["debit"].agg(["median", "max"]).reset_index()
             gm["label"] = [f"{BULAN[p.month - 1]} {p.year}" for p in gm["per"]]
@@ -695,7 +980,7 @@ def halaman_eksplorasi():
         c1, c2 = st.columns([1.1, 1], gap="medium")
         urut = EDA.sort_values("rasio_puncak")
         with c1:
-            with st.container(key="card_rank"):
+            with st.container(border=True, key="card_rank"):
                 judul_seksi("Rasio puncak terhadap median",
                             "Debit maksimum dibagi median. Nilai besar menandakan lonjakan ekstrem.")
                 top5 = set(EDA.sort_values("skor_peringkat").head(5)["kota"])
@@ -709,7 +994,7 @@ def halaman_eksplorasi():
                 tampil_grafik(fig)
                 st.caption("Warna tua menandai lima kota dengan skor peringkat risiko terbaik (paling berisiko).")
         with c2:
-            with st.container(key="card_rank_tbl"):
+            with st.container(border=True, key="card_rank_tbl"):
                 judul_seksi("Tabel peringkat",
                             "Skor peringkat gabungan; nilai lebih kecil berarti lebih berisiko.")
                 tabel = EDA.sort_values("skor_peringkat").rename(columns={
@@ -763,7 +1048,7 @@ def halaman_prediksi():
     kiri, kanan = st.columns([5, 7], gap="large")
 
     with kiri:
-        with st.container(key="card_form"):
+        with st.container(border=True, key="card_form"):
             judul_seksi("Data masukan",
                         "Nilai awal diambil dari data historis pada tanggal terpilih dan dapat diubah.")
             kota = st.selectbox("Kota", KOTA, key="p_kota")
@@ -804,7 +1089,7 @@ def halaman_prediksi():
     with kanan:
         hasil = st.session_state.get("hasil")
         if not hasil:
-            with st.container(key="card_kosong"):
+            with st.container(border=True, key="card_kosong"):
                 judul_seksi("Hasil prediksi",
                             "Pilih kota dan tanggal, periksa nilai masukan, lalu tekan Hitung prediksi.")
                 H(f'<div class="callout"><b>Cara membaca hasil.</b> Model memprediksi perubahan log debit satu hari ke depan, '
@@ -818,7 +1103,7 @@ def halaman_prediksi():
         arah = "naik" if selisih > 0 else "turun" if selisih < 0 else "tetap"
         mae = META["metrik_uji"]["GBR"]["MAE"]
 
-        with st.container(key="card_hasil"):
+        with st.container(border=True, key="card_hasil"):
             H(f'<div class="res-head"><div><div class="res-city">{hasil["kota"]}, prediksi untuk {tgl_id(tgl_target)}</div>'
               f'<div class="res-big">{fmt(hasil["pred"])}<small>m³/s</small></div>'
               f'<div class="res-delta">Debit {arah} {fmt(abs(selisih))} m³/s ({persen}) dari hari ini, {fmt(hasil["debit0"])} m³/s</div></div>'
@@ -835,7 +1120,7 @@ def halaman_prediksi():
                        "Untuk kota dengan debit kecil, galat relatif bisa lebih kecil atau lebih besar dari angka ini.")
 
         st.write("")
-        with st.container(key="card_sens"):
+        with st.container(border=True, key="card_sens"):
             judul_seksi("Sensitivitas terhadap hujan hari ini",
                         "Prediksi debit besok jika hujan hari ini diganti nilai lain, dengan masukan lain tetap sama.")
             nilai, debit = kurva_skenario_hujan(hasil)
@@ -857,7 +1142,7 @@ def halaman_prediksi():
             tampil_grafik(fig)
 
         st.write("")
-        with st.container(key="card_simpan"):
+        with st.container(border=True, key="card_simpan"):
             judul_seksi("Simpan ke riwayat",
                         f"Penyimpanan aktif: {DB_MODE} ({DB_INFO if DB_MODE == 'MySQL' else 'berkas prediksi_log.db lokal'}).")
             catatan = st.text_input("Catatan (opsional)", max_chars=200, key="p_catatan",
@@ -921,7 +1206,7 @@ def halaman_performa():
 
         g1, g2 = st.columns([1, 1.2], gap="medium")
         with g1:
-            with st.container(key="card_cmp"):
+            with st.container(border=True, key="card_cmp"):
                 judul_seksi("Galat model dan baseline", "Semakin rendah semakin baik.")
                 fig = go.Figure()
                 for nama, warna in (("Baseline", "#B9C7D0"), ("GBR", TEAL)):
@@ -935,7 +1220,7 @@ def halaman_performa():
                 tata_grafik(fig, 360)
                 tampil_grafik(fig)
         with g2:
-            with st.container(key="card_imp"):
+            with st.container(border=True, key="card_imp"):
                 judul_seksi("Fitur yang paling berpengaruh", "Feature importance model, 12 teratas.")
                 imp = pd.Series(META["feature_importance"]).sort_values(ascending=False)
                 jumlah_kota = float(imp[[i for i in imp.index if i.startswith("kota_")]].sum())
@@ -958,7 +1243,7 @@ def halaman_performa():
     with t2:
         bt = hitung_backtest()
         uji = bt[bt["uji"]]
-        with st.container(key="card_bt"):
+        with st.container(border=True, key="card_bt"):
             kol, _ = st.columns([1, 2])
             kota = kol.selectbox("Kota", KOTA, key="bt_kota")
             u = uji[uji["kota"] == kota]
@@ -979,7 +1264,7 @@ def halaman_performa():
             tampil_grafik(fig)
 
         st.write("")
-        with st.container(key="card_bt_tbl"):
+        with st.container(border=True, key="card_bt_tbl"):
             judul_seksi("Ringkasan galat per kota pada data uji",
                         "Dihitung ulang dari riwayat dan model tersimpan. Angka agregat resmi ada di tab Performa model.")
             rows = []
@@ -996,7 +1281,7 @@ def halaman_performa():
                                                              help="Positif berarti model lebih baik dari baseline.")})
 
     with t3:
-        with st.container(key="card_log"):
+        with st.container(border=True, key="card_log"):
             judul_seksi("Riwayat prediksi tersimpan",
                         f"Sumber: tabel prediksi_log pada {DB_MODE}. Menampilkan hingga 500 data terbaru.")
             try:
