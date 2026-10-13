@@ -1,0 +1,70 @@
+CATATAN PENGERJAAN PROYEK PEMANTAU DEBIT SUNGAI
+================================================
+Dikerjakan: 13 Oktober 2026
+Agen: Antigravity (Google DeepMind)
+Author commit: dirga <dirgad58@gmail.com>
+
+---
+A. PERSIAPAN LINGKUNGAN
+-----------------------
+- Python: 3.13.12 (memenuhi syarat 3.10-3.13)
+- Sumber zip: C:\Users\reno\Downloads\streamlit_banjir.zip
+- Lokasi proyek: C:\Users\reno\prediksi-debit-sungai
+- Virtual environment: .venv\
+- Pustaka terpasang: streamlit, pandas, numpy, scikit-learn==1.6.1, joblib, plotly, SQLAlchemy, PyMySQL, cryptography
+
+---
+B. STRUKTUR DIREKTORI
+---------------------
+Direktori tersusun rapi sesuai spesifikasi panduan:
+  - artifacts_banjir/ (4 artefak: model_gbr_debit.joblib, model_meta.json, riwayat_harian.csv, ringkasan_eda.csv)
+  - database/ (schema_banjir_db.sql, muat_data_mysql.py, tes_koneksi_mysql.py)
+  - notebook/ (proyek_prediksi_debit_sungai.ipynb)
+  - data_mentah/ (locations.csv, river_discharge.csv, rainfall_daily.csv)
+  - docs/gambar/ (01_beranda.png, 02_eksplorasi.png, 03_prediksi.png, 04_performa.png)
+  - .streamlit/ (config.toml, secrets.toml.example)
+
+---
+C. PEMBENAHAN KODE DAN PATH
+---------------------------
+- database/muat_data_mysql.py: default path --csv diperbarui menjadi '../artifacts_banjir/riwayat_harian.csv'.
+- database/tes_koneksi_mysql.py: dibuat untuk menguji koneksi MySQL dari .streamlit/secrets.toml dan menampilkan daftar tabel.
+- .gitignore: diperbarui untuk mengecualikan .streamlit/secrets.toml, prediksi_log.db, .venv/, __pycache__/, dll.
+
+---
+D. VERIFIKASI LOGIKA FITUR (BUAT_FITUR) DAN MODEL
+-------------------------------------------------
+- Model terlatih: GradientBoostingRegressor terverifikasi terbaca dengan scikit-learn 1.6.1.
+- MAE hitung ulang pada data uji (obs_date >= 2026-07-30): 1.8832 m3/s.
+- MAE tercatat di model_meta.json: 1.8519 m3/s.
+- Selisih MAE: 0.0313 (di bawah batas toleransi 0.05, diterima).
+- Verifikasi prediksi Banda Aceh pada 2026-10-09: 133.49 m3/s (status Waspada), sesuai spesifikasi acuan.
+
+---
+E. KONEKSI DAN PEMUATAN DATA MYSQL LOCALHOST
+--------------------------------------------
+- Host MySQL: localhost, port 3307 (layanan MySQL XAMPP)
+- Database: banjir_db
+- Hasil pemuatan data melalui muat_data_mysql.py:
+    * 22 lokasi
+    * 7.970 baris debit (debit_harian)
+    * 7.970 baris hujan (hujan_harian)
+- Verifikasi antarmuka: Sidebar Streamlit menampilkan indikator titik hijau dan status 'MySQL terhubung'.
+- Uji simpan prediksi: Berhasil menyimpan prediksi Banda Aceh ke tabel banjir_db.prediksi_log (ID 1, waktu 2026-10-13 16:48:00, status Waspada). Data berhasil diverifikasi tampil di tab Riwayat Prediksi.
+
+---
+F. MASALAH DAN SOLUSI
+---------------------
+1. Masalah: Port 3306 digunakan oleh container Docker (drought_mysql), sehingga koneksi ke XAMPP di port 3306 gagal.
+   Solusi: Mengidentifikasi proses MySQL XAMPP yang berjalan pada port 3307 (c:\xampp\mysql\bin\mysqld.exe) dan mengarahkan koneksi ke port 3307.
+2. Masalah: Database banjir_db belum ada di instance XAMPP saat awal pengetesan.
+   Solusi: Mengeksekusi database/schema_banjir_db.sql ke MySQL XAMPP port 3307.
+
+---
+G. IDENTITAS DAN REPOSITORI GITHUB
+----------------------------------
+- Author: dirga <dirgad58@gmail.com>
+- Username GitHub: dirga58
+- Nama repositori: prediksi-debit-sungai
+- Visibilitas: public
+- URL repositori: https://github.com/dirga58/prediksi-debit-sungai
