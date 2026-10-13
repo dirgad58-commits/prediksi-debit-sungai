@@ -102,7 +102,7 @@ prediksi-debit-sungai/
 
 ```bash
 # 1. Clone repo
-git clone https://github.com/dirga58/prediksi-debit-sungai.git
+git clone https://github.com/dirgad58-commits/prediksi-debit-sungai.git
 cd prediksi-debit-sungai
 
 # 2. Buat virtual environment
@@ -171,3 +171,4 @@ Proyek ini dibuat untuk keperluan akademik (mata kuliah Data Science dan Machine
 
 Dirga  
 Email: dirgad58@gmail.com
+

@@ -64,7 +64,8 @@ F. MASALAH DAN SOLUSI
 G. IDENTITAS DAN REPOSITORI GITHUB
 ----------------------------------
 - Author: dirga <dirgad58@gmail.com>
-- Username GitHub: dirga58
+- Username GitHub: dirgad58-commits
 - Nama repositori: prediksi-debit-sungai
 - Visibilitas: public
-- URL repositori: https://github.com/dirga58/prediksi-debit-sungai
+- URL repositori: https://github.com/dirgad58-commits/prediksi-debit-sungai
+
