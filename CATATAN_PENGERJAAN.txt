@@ -69,3 +69,12 @@ G. IDENTITAS DAN REPOSITORI GITHUB
 - Visibilitas: public
 - URL repositori: https://github.com/dirgad58-commits/prediksi-debit-sungai
 
+
+
+---
+H. PEMBARUAN PENYIMPANAN CSV DAN HALAMAN UTAMA (13 Okt 2026)
+------------------------------------------------------------
+- Metode database disederhanakan: Menggunakan berkas CSV mandiri (artifacts_banjir/riwayat_prediksi.csv) sehingga aplikasi dapat berjalan 100% andal dan instan di Streamlit Cloud tanpa kendala jaringan eksternal.
+- Dependensi requirements.txt disederhanakan (menghapus SQLAlchemy, PyMySQL, cryptography).
+- Halaman utama (landing page default) diubah menjadi menu Prediksi debit (input pengguna) agar langsung siap digunakan saat aplikasi dibuka.
+

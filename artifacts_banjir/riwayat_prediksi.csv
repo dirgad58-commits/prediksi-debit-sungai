@@ -1,0 +1,3 @@
+id,waktu_prediksi,kota,tanggal_acuan,tanggal_target,debit_hari_ini,hujan_hari_ini,hujan_sum3,hujan_sum7,prediksi_debit,baseline_debit,status_risiko,catatan
+1,2026-10-13 16:48:00,Banda Aceh,2026-10-09,2026-10-10,120.06,14.5,42.0,85.2,133.49,120.06,Waspada,Uji coba prediksi data historis
+2,2026-10-13 20:51:23,Medan,2026-10-09,2026-10-10,45.2,10.0,25.0,60.0,48.5,45.2,Normal,Tes simpan CSV

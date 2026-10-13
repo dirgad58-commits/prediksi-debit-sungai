@@ -14,7 +14,6 @@ import json
 import warnings
 from datetime import datetime
 from pathlib import Path
-from urllib.parse import quote_plus
 
 import joblib
 import numpy as np
@@ -23,8 +22,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from plotly.subplots import make_subplots
-from sqlalchemy import (Column, Date, DateTime, Float, Integer, MetaData,
-                        String, Table, create_engine, insert, select, text)
+# Penyimpanan berbasis CSV mandiri (tanpa dependensi database eksternal)
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -718,62 +716,51 @@ def hitung_backtest():
 
 
 # ----------------------------------------------------------------------------
-# 4. Database (MySQL banjir_db, cadangan SQLite lokal)
+# 4. Penyimpanan Riwayat Prediksi: Berkas CSV Mandiri
 # ----------------------------------------------------------------------------
-db_meta = MetaData()
-t_prediksi = Table(
-    "prediksi_log", db_meta,
-    Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("waktu_prediksi", DateTime, nullable=False),
-    Column("kota", String(50), nullable=False),
-    Column("tanggal_acuan", Date),
-    Column("tanggal_target", Date),
-    Column("debit_hari_ini", Float),
-    Column("hujan_hari_ini", Float),
-    Column("hujan_sum3", Float),
-    Column("hujan_sum7", Float),
-    Column("prediksi_debit", Float),
-    Column("baseline_debit", Float),
-    Column("status_risiko", String(10)),
-    Column("catatan", String(255)),
-)
-
-
-@st.cache_resource(show_spinner=False)
-def buka_koneksi():
-    """Mengembalikan (engine, mode, keterangan). Mencoba MySQL dulu, lalu SQLite."""
-    galat = "secrets.toml belum diisi"
-    try:
-        cfg = st.secrets["mysql"]
-        host = cfg.get("host", "localhost")
-        port = int(cfg.get("port", 3306))
-        nama_db = cfg.get("database", "banjir_db")
-        url = (f"mysql+pymysql://{cfg['user']}:{quote_plus(str(cfg['password']))}"
-               f"@{host}:{port}/{nama_db}?charset=utf8mb4")
-        eng = create_engine(url, pool_pre_ping=True, pool_recycle=1800,
-                            connect_args={"connect_timeout": 5})
-        with eng.connect() as c:
-            c.execute(text("SELECT 1"))
-        db_meta.create_all(eng, tables=[t_prediksi])
-        return eng, "MySQL", f"{host}:{port}/{nama_db}"
-    except Exception as e:  # noqa: BLE001
-        galat = str(e).splitlines()[0][:160] if str(e) else e.__class__.__name__
-    eng = create_engine(f"sqlite:///{BASE / 'prediksi_log.db'}")
-    db_meta.create_all(eng, tables=[t_prediksi])
-    return eng, "SQLite", galat
-
-
-ENGINE, DB_MODE, DB_INFO = buka_koneksi()
+FILE_LOG_CSV = BASE / "artifacts_banjir" / "riwayat_prediksi.csv"
+KOLOM_LOG = [
+    "id", "waktu_prediksi", "kota", "tanggal_acuan", "tanggal_target",
+    "debit_hari_ini", "hujan_hari_ini", "hujan_sum3", "hujan_sum7",
+    "prediksi_debit", "baseline_debit", "status_risiko", "catatan"
+]
 
 
 def simpan_prediksi(baris):
-    with ENGINE.begin() as c:
-        c.execute(insert(t_prediksi).values(**baris))
+    """Menyimpan baris prediksi ke berkas CSV riwayat."""
+    if FILE_LOG_CSV.exists():
+        try:
+            df = pd.read_csv(FILE_LOG_CSV)
+        except Exception:
+            df = pd.DataFrame(columns=KOLOM_LOG)
+    else:
+        df = pd.DataFrame(columns=KOLOM_LOG)
+
+    baris_baru = dict(baris)
+    baris_baru["id"] = int(df["id"].max() + 1) if (not df.empty and "id" in df.columns and pd.notna(df["id"].max())) else 1
+    
+    if hasattr(baris_baru["waktu_prediksi"], "strftime"):
+        baris_baru["waktu_prediksi"] = baris_baru["waktu_prediksi"].strftime("%Y-%m-%d %H:%M:%S")
+    baris_baru["tanggal_acuan"] = str(baris_baru["tanggal_acuan"])
+    baris_baru["tanggal_target"] = str(baris_baru["tanggal_target"])
+
+    df_baru = pd.concat([df, pd.DataFrame([baris_baru])], ignore_index=True)
+    df_baru.to_csv(FILE_LOG_CSV, index=False, encoding="utf-8")
 
 
 def baca_riwayat(batas=500):
-    q = select(t_prediksi).order_by(t_prediksi.c.id.desc()).limit(batas)
-    return pd.read_sql(q, ENGINE)
+    """Membaca riwayat prediksi dari berkas CSV."""
+    if not FILE_LOG_CSV.exists():
+        return pd.DataFrame(columns=KOLOM_LOG)
+    try:
+        df = pd.read_csv(FILE_LOG_CSV)
+        if df.empty:
+            return df
+        if "id" in df.columns:
+            df = df.sort_values("id", ascending=False)
+        return df.head(batas)
+    except Exception:
+        return pd.DataFrame(columns=KOLOM_LOG)
 
 
 # ----------------------------------------------------------------------------
@@ -1144,7 +1131,7 @@ def halaman_prediksi():
         st.write("")
         with st.container(border=True, key="card_simpan"):
             judul_seksi("Simpan ke riwayat",
-                        f"Penyimpanan aktif: {DB_MODE} ({DB_INFO if DB_MODE == 'MySQL' else 'berkas prediksi_log.db lokal'}).")
+                        "Penyimpanan aktif: Berkas CSV riwayat prediksi (tersimpan otomatis).")
             catatan = st.text_input("Catatan (opsional)", max_chars=200, key="p_catatan",
                                     placeholder="Contoh: skenario hujan lebat")
             if st.button("Simpan ke riwayat", icon=":material/save:", key="btn_simpan"):
@@ -1164,7 +1151,7 @@ def halaman_prediksi():
                         "catatan": catatan or None})
                     st.success("Prediksi tersimpan. Lihat di menu Performa model dan riwayat.")
                 except Exception as e:  # noqa: BLE001
-                    st.error(f"Gagal menyimpan ke {DB_MODE}: {str(e).splitlines()[0][:200]}")
+                    st.error(f"Gagal menyimpan riwayat: {str(e).splitlines()[0][:200]}")
 
 
 # ----------------------------------------------------------------------------
@@ -1283,11 +1270,11 @@ def halaman_performa():
     with t3:
         with st.container(border=True, key="card_log"):
             judul_seksi("Riwayat prediksi tersimpan",
-                        f"Sumber: tabel prediksi_log pada {DB_MODE}. Menampilkan hingga 500 data terbaru.")
+                        "Sumber: Berkas CSV riwayat prediksi. Menampilkan hingga 500 data terbaru.")
             try:
                 log = baca_riwayat()
             except Exception as e:  # noqa: BLE001
-                st.error(f"Gagal membaca riwayat dari {DB_MODE}: {str(e).splitlines()[0][:200]}")
+                st.error(f"Gagal membaca riwayat dari berkas CSV: {str(e).splitlines()[0][:200]}")
                 return
             if log.empty:
                 H('<div class="callout"><b>Belum ada prediksi tersimpan.</b> Buka menu Prediksi debit, hitung prediksi, '
@@ -1314,26 +1301,24 @@ def halaman_performa():
 
 
 # ----------------------------------------------------------------------------
-# 10. Navigasi dan sidebar
+# 10. Navigasi dan sidebar (Halaman Utama Default: Prediksi Debit)
 # ----------------------------------------------------------------------------
-p_beranda = st.Page(halaman_beranda, title="Beranda risiko", icon=":material/dashboard:",
-                    url_path="beranda", default=True)
+p_prediksi = st.Page(halaman_prediksi, title="Prediksi debit", icon=":material/water_drop:",
+                    url_path="prediksi", default=True)
+p_beranda = st.Page(halaman_beranda, title="Beranda risiko", icon=":material/dashboard:", url_path="beranda")
 p_eksplor = st.Page(halaman_eksplorasi, title="Eksplorasi data", icon=":material/insights:", url_path="eksplorasi")
-p_prediksi = st.Page(halaman_prediksi, title="Prediksi debit", icon=":material/water_drop:", url_path="prediksi")
 p_performa = st.Page(halaman_performa, title="Performa dan riwayat", icon=":material/analytics:", url_path="performa")
 
-nav = st.navigation([p_beranda, p_eksplor, p_prediksi, p_performa], position="hidden")
+nav = st.navigation([p_prediksi, p_beranda, p_eksplor, p_performa], position="hidden")
 
 with st.sidebar:
     H(f'<div class="brand"><div class="brand-mark">{ikon("waves", 22)}</div>'
       f'<div><div class="brand-name">Pemantau Debit Sungai</div>'
       f'<div class="brand-sub">Prediksi 1 hari ke depan</div></div></div>')
-    for pg in (p_beranda, p_eksplor, p_prediksi, p_performa):
+    for pg in (p_prediksi, p_beranda, p_eksplor, p_performa):
         st.page_link(pg)
-    warna_db = "#4FB286" if DB_MODE == "MySQL" else "#E0B24A"
-    status_db = "MySQL terhubung" if DB_MODE == "MySQL" else "SQLite lokal (MySQL tidak terhubung)"
     H(f'<div class="side-note"><b>Data terakhir</b><br>{tgl_id(TGL_AKHIR)}<br><br>'
-      f'<b>Penyimpanan</b><br><span class="dot" style="background:{warna_db}"></span>{status_db}<br><br>'
+      f'<b>Penyimpanan</b><br><span class="dot" style="background:#10B981"></span>Berkas CSV aktif (22 kota)<br><br>'
       f'<b>Model</b><br>Gradient Boosting Regressor, 35 fitur</div>')
 
 nav.run()
