@@ -1,0 +1,11 @@
+.streamlit/secrets.toml
+prediksi_log.db
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+.DS_Store
+*.egg-info/
+dist/
+build/
+.env
